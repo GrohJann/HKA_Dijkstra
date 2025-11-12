@@ -32,7 +32,7 @@ public:
      * @param data data to add
      */
     void addFirst(T data) {
-        auto newNode = new Node<T>;
+        Node<T> newNode;
         newNode -> next = head;
         head = newNode;
     }
@@ -42,7 +42,7 @@ public:
      * @param data data to append
      */
     void add(T data) {
-        auto newNode = new Node<T>(data);
+        Node<T> newNode;
         last -> next = newNode;
     }
 
