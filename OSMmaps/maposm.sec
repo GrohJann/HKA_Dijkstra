@@ -1831,7 +1831,7 @@
  <node id="524536688" visible="true" version="9" changeset="135252613" timestamp="2023-04-23T08:31:18Z" user="mapper999" uid="165061" lat="49.0137895" lon="8.4102437">
   <tag k="crossing:barrier" v="no"/>
   <tag k="crossing:bell" v="no"/>
-  <tag k="crossing:chicane" v="no"/>
+  <tag k="crossing:chicane" v="no"/>8.3917790"/
   <tag k="crossing:light" v="no"/>
   <tag k="crossing:saltire" v="yes"/>
   <tag k="railway" v="crossing"/>

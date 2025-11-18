@@ -33,6 +33,7 @@ public:
      */
     void addFirst(T data) {
         Node<T> newNode;
+        newNode.data = data;
         newNode -> next = head;
         head = newNode;
     }
@@ -43,7 +44,9 @@ public:
      */
     void add(T data) {
         Node<T> newNode;
+        newNode.data = data;
         last -> next = newNode;
+
     }
 
     T popFirst() {
