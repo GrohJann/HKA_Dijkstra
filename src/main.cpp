@@ -1,6 +1,21 @@
-//
-// Created by ruvaak on 12.11.25.
-//
+/**
+ * @file main.cpp
+ * @brief TODO: Add a short description of what this file does.
+ *
+ * @author GrohJann
+ * @date 12/11/2025
+ */
+
+/*
+ * Projektarbeit 1 – Dijkstra‘s Algorithmus
+ * Gruppe:
+ * Jannis Maximilian Grohmann
+ *
+ * Ich stimme der Veröffentlichung des Source Code *nicht* zu.
+ * Copyright (C) 2025 Jannis Maximilian Grohmann
+ * SPDX-License-Identifier: CC BY-NC-ND-4.0 (Creative Commons Attribution-NonCommercial-NoDerivatives)
+ * https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en
+*/
 
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
@@ -10,6 +25,7 @@
 #include "Model/OSMHandler.cpp"
 #include "View/SDLHandler.h"
 #include "Model/Color.h"
+#include "Controller/Dijkstra.cpp"
 
 
 struct AppState {
@@ -18,7 +34,8 @@ struct AppState {
     SDL_Renderer* renderer;
     Color background;
     Color foreground;
-    SDLHandler handler;
+    SDLHandler* sdl_handler;
+    OSMHandler* osm_handler;
     bool redraw;
 };
 
@@ -28,25 +45,26 @@ struct AppState {
  * Shouldn't have a infinite loop and do only one-time startup stuff
  * @param appstate
  * @param argc
- * @param argvile (fileContent.find("<way") != std::string::npos) {
-            std::string node = getElement("way", &fileContent);
-            std::cout << node << std::endl << std::endl;
-        }
-        return 0;
+ * @param argv
  * @return if SDL_APP_CONTINUE is returned, the app runs<br>
  *         if SDL_APP_FALIURE is returned, the app terminates with an
  *         appropriate exit error code<br>
  *         if SDL_APP_SUCCESS is returned, the app terminates in success
  */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
-    //std::string fileName;
-    //std::cout << "please enter the file name: ";
-    //std::cin >> fileName;
     OSMHandler osm;
     //osm.parseFile(fileName);
     osm.parseFile("../OSMmaps/maposm.sec");
 
-    //constexpr SDLHandler sdl;
+    /*Dijkstra dijkstra;
+    //route von HKA N bau zum Schloss
+    auto test = dijkstra.getFastestPath(osm.getNodeMap(), 6478027644, 14795723);
+    std::cout << "Route von HKA zum Schloss: " << std::endl;
+    for (auto i : test) {
+        std::cout << i << std::endl;
+    }*/
+
+    auto sdl = SDLHandler(osm.getNodeMap());
 
     if (!(*appstate = SDL_malloc(sizeof(AppState)))) {
         return SDL_APP_FAILURE;
@@ -59,7 +77,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     state -> title = "My SDL Window";
     state -> background = {0, 0, 0, 255};
     state -> foreground = {0, 255, 0, 255};
-    //state -> handler = sdl;
+    state -> sdl_handler = &sdl;
+    state -> osm_handler = &osm;
     int width = 640;
     int height = 480;
     if (!(state->window = SDL_CreateWindow(state -> title, width, height, SDL_WINDOW_RESIZABLE)))
@@ -79,7 +98,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 SDL_AppResult SDL_AppIterate(void *appstate) {
     auto* state = (AppState*)appstate;
     if (state->redraw) {
-        SDLHandler::redrawSDLWindow(state -> window, state -> renderer,
+        state->sdl_handler->redrawSDLWindow(state -> window, state -> renderer, state -> osm_handler->getNodeMap(),
             &state -> background, &state -> foreground);
         state->redraw = false;
     }

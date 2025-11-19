@@ -25,10 +25,11 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(HKA_Dijkstra src/main.cpp
         src/Model/OSMHandler.cpp
-        src/Model/LinkedList.h
         src/View/SDLHandler.cpp
         src/View/SDLHandler.h
         src/Model/Color.h
+        src/Controller/Dijkstra.cpp
+        src/Model/OSMStructs.h
 )
 
 
