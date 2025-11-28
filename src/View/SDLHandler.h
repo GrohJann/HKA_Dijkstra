@@ -21,8 +21,8 @@ class SDLHandler {
 private:
     double minLat{}, maxLat{}, minLon{}, maxLon{};
 
-    static void drawCircle(SDL_Renderer *r, int cx, int cy, int radius);
-    void projectLatLon(const OSMNode* node, const int width, const int height, int* x, int* y);
+    //static void drawCircle(SDL_Renderer *r, int cx, int cy, int radius);
+    void projectLatLon(const OSMNode* node, int* x, int* y);
 
 public:
     explicit SDLHandler(std::unordered_map<unsigned long long, OSMNode>* nodeMap);

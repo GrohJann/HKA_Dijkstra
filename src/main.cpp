@@ -56,13 +56,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     //osm.parseFile(fileName);
     osm.parseFile("../OSMmaps/maposm.sec");
 
-    /*Dijkstra dijkstra;
+    /*/Dijkstra dijkstra;
     //route von HKA N bau zum Schloss
     auto test = dijkstra.getFastestPath(osm.getNodeMap(), 6478027644, 14795723);
     std::cout << "Route von HKA zum Schloss: " << std::endl;
     for (auto i : test) {
         std::cout << i << std::endl;
-    }*/
+    }//*/
 
     auto sdl = SDLHandler(osm.getNodeMap());
 

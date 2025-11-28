@@ -110,7 +110,7 @@ public:
             path.insert(path.begin(), node.previous);
             node = *(std::find(nodeList.begin(), nodeList.begin()+sorted +1, node.previous));
         }
-        const long double length = static_cast<long double>((nodeList.begin() + sorted)->distance)/static_cast<long double>(100);
+        const long double length = static_cast<long double>((nodeList.begin() + sorted)->distance)/static_cast<long double>(1000);
         std::cout << "Route gefunden. Laenge: " << length << " Meter" << std::endl;
         return path;
     }

@@ -32,7 +32,6 @@ public:
      * @param fileName location and name of file to parse
      * @return returns 0 on success
      */
-//            elem.erase(start, end + key.size());
     int parseFile(const std::string& fileName) {
         //read file
         std::string fileContent;
@@ -44,8 +43,6 @@ public:
         //remove unnecessary start of file
         uint contentBegin = fileContent.find("<node");
         fileContent.erase(0, contentBegin);
-
-//            elem.erase(start, end + key.size());
 
         // add nodes
         while (fileContent.find("<node") != std::string::npos) {
@@ -59,6 +56,8 @@ public:
             //std::cout << node << std::endl << std::endl;
             addWay(node);
         }
+
+        std::cout << "File parsed!" << std::endl;
         return 0;
     }
 
@@ -110,6 +109,7 @@ private:
         std::string lat = getKeyValue(node, "lat"); //double
         std::string lon = getKeyValue(node, "lon");
 
+        std::cout << id << std::endl;
 
         if ((id + lat + lon).empty()) {
             std::cerr << "Error: Cannot add node with id: " << id << ", lat: "
@@ -156,7 +156,7 @@ private:
      * Calculates the distance between two OSMNodes using the haversine formula and the nodes latitude and longitude
      * @param start start Node
      * @param end end Node
-     * @return distance in centimeter
+     * @return distance in millimeter
      */
     static unsigned long long calcDistance( const OSMNode* start, const OSMNode* end ) {
         constexpr long int earthRadius = 6371e6;
