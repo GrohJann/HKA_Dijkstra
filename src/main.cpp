@@ -34,8 +34,10 @@ struct AppState {
     SDL_Renderer* renderer;
     Color background;
     Color foreground;
+    Color routeColor;
     SDLHandler* sdl_handler;
     OSMHandler* osm_handler;
+    Dijkstra* dijkstra;
     bool redraw;
 };
 
@@ -52,19 +54,19 @@ struct AppState {
  *         if SDL_APP_SUCCESS is returned, the app terminates in success
  */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
-    OSMHandler osm;
+    //OSMHandler osm;
+    auto* osm = new OSMHandler();
     //osm.parseFile(fileName);
-    osm.parseFile("../OSMmaps/maposm.sec");
+    osm -> parseFile("../OSMmaps/maposm.sec");
 
-    /*/Dijkstra dijkstra;
+    auto* dijkstra = new Dijkstra();
     //route von HKA N bau zum Schloss
-    auto test = dijkstra.getFastestPath(osm.getNodeMap(), 6478027644, 14795723);
-    std::cout << "Route von HKA zum Schloss: " << std::endl;
-    for (auto i : test) {
+    std::vector<unsigned long long> path = dijkstra -> calculateFastestPath(osm -> getNodeMap(), 6478027644, 14795723);
+    /*std::cout << "Route von HKA zum Schloss: " << std::endl;
+    for (auto i : path) {
         std::cout << i << std::endl;
     }//*/
-
-    auto sdl = SDLHandler(osm.getNodeMap());
+    auto* sdl = new SDLHandler(osm -> getNodeMap());
 
     if (!(*appstate = SDL_malloc(sizeof(AppState)))) {
         return SDL_APP_FAILURE;
@@ -77,8 +79,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     state -> title = "My SDL Window";
     state -> background = {0, 0, 0, 255};
     state -> foreground = {0, 255, 0, 255};
-    state -> sdl_handler = &sdl;
-    state -> osm_handler = &osm;
+    state -> routeColor = {255, 0, 255, 255};
+    state -> sdl_handler = sdl;
+    state -> osm_handler = osm;
+    state -> dijkstra = dijkstra;
     int width = 640;
     int height = 480;
     if (!(state->window = SDL_CreateWindow(state -> title, width, height, SDL_WINDOW_RESIZABLE)))
@@ -98,8 +102,17 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 SDL_AppResult SDL_AppIterate(void *appstate) {
     auto* state = (AppState*)appstate;
     if (state->redraw) {
-        state->sdl_handler->redrawSDLWindow(state -> window, state -> renderer, state -> osm_handler->getNodeMap(),
-            &state -> background, &state -> foreground);
+        //Dijkstra dijkstra;
+        //todo: make the route change able
+        //route von HKA N bau zum Schloss
+        //auto path = dijkstra.getFastestPath(state -> osm_handler -> getNodeMap(), 6478027644, 14795723);
+        /*std::cout << "Route von HKA zum Schloss: " << std::endl;
+        for (auto i : test) {
+            std::cout << i << std::endl;
+        }//*/
+
+        state->sdl_handler->redrawSDLWindow(state -> window, state -> renderer, state -> osm_handler->getNodeMap(), state -> dijkstra->getFastestPath(),
+            &state -> background, &state -> foreground, &state -> routeColor);
         state->redraw = false;
     }
     SDL_Delay(1);

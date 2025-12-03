@@ -109,7 +109,7 @@ private:
         std::string lat = getKeyValue(node, "lat"); //double
         std::string lon = getKeyValue(node, "lon");
 
-        std::cout << id << std::endl;
+        //std::cout << id << std::endl;
 
         if ((id + lat + lon).empty()) {
             std::cerr << "Error: Cannot add node with id: " << id << ", lat: "

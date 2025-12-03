@@ -44,9 +44,12 @@ class Dijkstra {
 
     };
 
-
+private:
+    std::vector<unsigned long long> path;
 public:
-    std::vector<unsigned long long> getFastestPath(const std::unordered_map<unsigned long long, OSMNode>* nodeMap,
+    Dijkstra() = default;
+
+    std::vector<unsigned long long> calculateFastestPath(const std::unordered_map<unsigned long long, OSMNode>* nodeMap,
                 const long long startNodeID, const long long endNodeID) {
 
         //todo: check if start node has edges
@@ -112,6 +115,12 @@ public:
         }
         const long double length = static_cast<long double>((nodeList.begin() + sorted)->distance)/static_cast<long double>(1000);
         std::cout << "Route gefunden. Laenge: " << length << " Meter" << std::endl;
+        this -> path = path;
         return path;
     }
+
+    std::vector<unsigned long long>* getFastestPath() {
+        return &this->path;
+    }
+
 };

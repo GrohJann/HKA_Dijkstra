@@ -19,15 +19,23 @@
 class SDLHandler {
 
 private:
-    double minLat{}, maxLat{}, minLon{}, maxLon{};
+    double minLat, maxLat, minLon, maxLon;
 
-    //static void drawCircle(SDL_Renderer *r, int cx, int cy, int radius);
-    void projectLatLon(const OSMNode* node, int* x, int* y);
+    void projectLatLon(const double* lat, const double* lon, int* x, int* y);
 
 public:
     explicit SDLHandler(std::unordered_map<unsigned long long, OSMNode>* nodeMap);
 
-    void redrawSDLWindow(SDL_Window* window, SDL_Renderer* renderer, const std::unordered_map<unsigned long long, OSMNode>* nodeMap, const Color* backgroundColor, const Color* foregroundColor);
+    void redrawSDLWindow(
+        SDL_Window* window,
+        SDL_Renderer* renderer,
+        const std::unordered_map<unsigned long long, OSMNode>* nodeMap,
+        const std::vector<unsigned long long>* path,
+        const Color* backgroundColor,
+        const Color* foregroundColor,
+        const Color* routeColor
+    );
+
     void updateBounds(std::unordered_map<unsigned long long, OSMNode>* nodeMap);
 };
 
