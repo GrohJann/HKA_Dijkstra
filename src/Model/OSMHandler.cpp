@@ -1,6 +1,6 @@
 /**
  * @file OSMHandler.cpp
- * @brief TODO: Add a short description of what this file does.
+ * @brief Parses OpenStreetMap data
  *
  * @author GrohJann
  * @date 12/11/2025

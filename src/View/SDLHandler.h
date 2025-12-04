@@ -1,6 +1,5 @@
 /**
  * @file SDLHandler.h
- * @brief TODO: Add a short description of what this file does.
  *
  * @author GrohJann
  * @date 13/11/2025

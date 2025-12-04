@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @brief TODO: Add a short description of what this file does.
+ * @brief Starts the programm and manages the programm flow
  *
  * @author GrohJann
  * @date 12/11/2025
@@ -20,7 +20,9 @@
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL.h>
-//#include <SDL3/SDL_events.h>
+#include <iostream>
+#include <unistd.h>
+#include <sys/select.h>
 
 #include "Model/OSMHandler.cpp"
 #include "View/SDLHandler.h"
@@ -60,12 +62,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     osm -> parseFile("../OSMmaps/maposm.sec");
 
     auto* dijkstra = new Dijkstra();
+    std::cout << "Caluclating route..." << std::endl;
     //route von HKA N bau zum Schloss
     std::vector<unsigned long long> path = dijkstra -> calculateFastestPath(osm -> getNodeMap(), 6478027644, 14795723);
-    /*std::cout << "Route von HKA zum Schloss: " << std::endl;
-    for (auto i : path) {
-        std::cout << i << std::endl;
-    }//*/
     auto* sdl = new SDLHandler(osm -> getNodeMap());
 
     if (!(*appstate = SDL_malloc(sizeof(AppState)))) {
@@ -91,7 +90,22 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     if (!(state->renderer = SDL_CreateRenderer(state->window, NULL)))
         return SDL_APP_FAILURE;
 
+    std::cout << "Program loaded!" << std::endl;
+    std::cout << "Type Y to change route..." << std::endl;
     return SDL_APP_CONTINUE;
+}
+
+/**
+ * Posix way of checking whether something was entered into the console
+ * @return returns true when something was typed into the console
+ */
+static bool consoleInputEnteredPosix() {
+    timeval tv = {0, 0};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+
+    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
 }
 
 /*
@@ -101,21 +115,42 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
  */
 SDL_AppResult SDL_AppIterate(void *appstate) {
     auto* state = (AppState*)appstate;
-    if (state->redraw) {
-        //Dijkstra dijkstra;
-        //todo: make the route change able
-        //route von HKA N bau zum Schloss
-        //auto path = dijkstra.getFastestPath(state -> osm_handler -> getNodeMap(), 6478027644, 14795723);
-        /*std::cout << "Route von HKA zum Schloss: " << std::endl;
-        for (auto i : test) {
-            std::cout << i << std::endl;
-        }//*/
 
-        state->sdl_handler->redrawSDLWindow(state -> window, state -> renderer, state -> osm_handler->getNodeMap(), state -> dijkstra->getFastestPath(),
-            &state -> background, &state -> foreground, &state -> routeColor);
+    if (consoleInputEnteredPosix()) {
+        std::string temp;
+        std::cin >> temp;
+        if (temp == "y" || temp == "Y") {
+            std::string startNode, endNode;
+            std::cout << "Enter start node ID: ";
+            std::cin >> startNode;
+            std::cout << "Enter end node ID: ";
+            std::cin >> endNode;
+            std::cout << "Calculating route ..." << std::endl;
+            std::vector<unsigned long long> path = state -> dijkstra -> calculateFastestPath(
+                    state -> osm_handler -> getNodeMap(),
+                    std::stoll(startNode),
+                    std::stoll(endNode)
+            );
+            std::cout << "Type Y to change route..." << std::endl;
+            state -> redraw = true;
+        }
+    }
+
+    if (state->redraw) {
+
+        state->sdl_handler->redrawSDLWindow(
+            state -> window,
+            state -> renderer,
+            state -> osm_handler->getNodeMap(),
+            state -> dijkstra->getFastestPath(),
+            &state -> background,
+            &state -> foreground,
+            &state -> routeColor
+        );
         state->redraw = false;
     }
     SDL_Delay(1);
+
     return SDL_APP_CONTINUE;
 }
 

@@ -1,6 +1,6 @@
 /**
  * @file Dijkstra.cpp
- * @brief TODO: Add a short description of what this file does.
+ * @brief Implements Dijkstra's algorithm to find the shortest route between to nodes
  *
  * @author GrohJann
  * @date 19/11/2025

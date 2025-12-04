@@ -1,6 +1,6 @@
 /**
  * @file OSMStructs.h
- * @brief TODO: Add a short description of what this file does.
+ * @brief Selection of structs used to store data of OpenStreetMaps
  *
  * @author GrohJann
  * @date 19/11/2025
@@ -20,7 +20,8 @@ struct OSMNode {
     std::vector<Edge> edges;
 };
 
-/*enum TransportMode {
+/*
+enum TransportMode {
     CAR,
     BIKE,
     FOOT,

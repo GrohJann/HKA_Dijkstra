@@ -1,6 +1,6 @@
 /**
  * @file Color.h
- * @brief TODO: Add a short description of what this file does.
+ * @brief simple struct to store color values.
  *
  * @author GrohJann
  * @date 13/11/2025

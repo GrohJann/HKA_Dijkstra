@@ -1,6 +1,7 @@
 /**
  * @file SDLHandler.cpp
- * @brief TODO: Add a short description of what this file does.
+ * @brief Handles everything SDL, mainly redrawing the window and a few helper
+ *        methods necessary to do so
  *
  * @author GrohJann
  * @date 13/11/2025
@@ -12,18 +13,28 @@
 #include <cmath>
 #include <algorithm>
 
-// location on HKA campus
-//double minLat = 49.0166959, maxLat = 49.0166959, minLon = 8.3903114, maxLon = 8.3903114;
 
-
-
-//TODO: fix this
+/**
+ * Initializes class and updates the upper and lower bounds of the map to be drawn
+ * @param nodeMap node map of all the nodes that are supposed to be drawn
+ */
 SDLHandler::SDLHandler(std::unordered_map<unsigned long long, OSMNode>* nodeMap) {
+    // location on HKA campus
     this -> minLat = 49.0166959, this -> maxLat = 49.0166959, this -> minLon = 8.3903114, this -> maxLon = 8.3903114;
     updateBounds(nodeMap);
 
 }
 
+/**
+ * Redraws Window on change
+ * @param window
+ * @param renderer
+ * @param nodeMap unordered map containing all Nodes of the Map
+ * @param path list of nodes of the calculated route
+ * @param backgroundColor
+ * @param foregroundColor
+ * @param routeColor
+ */
 void SDLHandler::redrawSDLWindow(
         SDL_Window* window,
         SDL_Renderer* renderer,
@@ -58,7 +69,6 @@ void SDLHandler::redrawSDLWindow(
         const double y = h - ((node.lat - this->minLat)/(this->maxLat - this->minLat))*h;
         const SDL_FRect rect1 = SDL_FRect(x-r, y-r, 2*r, 2*r);
         for (const Edge& edge : node.edges) {
-            //todo: check if route exsits
             auto it = std::find(path->begin(), path->end(), edge.prev->id);
             // check if edge is part of the calculated route
             if (it != path->end() && std::next(it) != path->end() && *std::next(it) == edge.next->id) {
@@ -88,12 +98,14 @@ void SDLHandler::updateBounds(std::unordered_map<unsigned long long, OSMNode>* n
     }
 }
 
+
 /**
  * projects a location from latitude and longitude to cartesian coordinates
  * @param node
  * @param x
  * @param y
  */
+[[deprecated("not fully implemented, or working")]]
 void SDLHandler::projectLatLon(const double* lat, const double* lon, int* x, int* y) {
     constexpr long int earthRadius = 6371e5;
     *x = earthRadius * std::cos(*lat) * std::cos(*lon);
