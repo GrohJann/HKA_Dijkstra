@@ -21,7 +21,7 @@
 
 class OSMHandler {
 
-    std::unordered_map<unsigned long long, OSMNo#de> nodeMap;
+    std::unordered_map<unsigned long long, OSMNode> nodeMap;
 
 public:
     OSMHandler() = default;
